@@ -13,8 +13,9 @@
     (LocalPromiseStore. (swap! store
                                cache/evict
                                id)))
-  (lookup [_ id]
-    (get @store id)))
+  (lookup [this id]
+    (get (:store
+          (store/register! this id)) id)))
 
 (defn make-store [{:keys [ttl] :as config}]
   (LocalPromiseStore. (atom (cache/ttl-cache-factory {} :ttl ttl))))
