@@ -1,0 +1,11 @@
+{:aliases
+ {:dev
+  {:extra-deps
+   {omnypay/pantheon-dev-tools
+    {:git/url "git@github.com:omnypay/pantheon-dev-tools.git",
+     :sha "910c63c35ce5565573097bc392c76bdd86c16836"
+     :tag "master"}}}},
+ :deps
+ {org.clojure/clojure {:mvn/version "1.9.0"},
+  org.clojure/core.cache {:mvn/version "0.7.1"}
+  com.climate/claypoole {:mvn/version "1.1.4"}}}
