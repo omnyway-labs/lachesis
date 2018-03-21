@@ -1,6 +1,7 @@
 (ns lachesis.core
   (:require [lachesis.store :as store]
-            [lachesis.store.local :as local-store]))
+            [lachesis.store.local :as local-store])
+  (:refer-clojure :exclude [deref deliver]))
 
 (def default-settings {:ttl (* 30 60 1000)
                        :deref-timeout 10000
@@ -32,21 +33,21 @@
    (reset! store (build-store (setting :store-type)))))
 
 ;; Provides a reference to the promise we'd like to deref
-(defn identified-promise [id]
+(defn named-promise [id]
   (when-not @store
     (throw (ex-info "Lachesis has not been initialized"
                     {})))
   (store/register! @store id))
 
 ;; Looks up and attempts to deref that promise
-(defn deref-by-id
+(defn deref
   ([id]
-   (deref-by-id id (setting :deref-timeout)))
+   (deref id (setting :deref-timeout)))
   ([id timeout]
    (let [p (store/lookup @store id)]
-     (deref p timeout nil))))
+     (clojure.core/deref p timeout nil))))
 
-(defn deliver-by-id [id v]
+(defn deliver [id v]
   (let [p (store/lookup @store id)]
     (when-not (realized? p)
-      (deliver p v))))
+      (clojure.core/deliver p v))))
